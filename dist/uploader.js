@@ -9518,7 +9518,7 @@ var Root = function (_Component) {
             return _react2['default'].createElement(
                 _reactRedux.Provider,
                 { store: this.store },
-                _react2['default'].createElement(
+                 false ? _react2['default'].createElement(_Uploader2['default'], this.props) : _react2['default'].createElement(
                     'div',
                     null,
                     _react2['default'].createElement(_Uploader2['default'], this.props),

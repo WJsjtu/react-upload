@@ -14,10 +14,14 @@ export default class Root extends Component {
     render() {
         return (
             <Provider store={this.store}>
-                <div>
+                {process.env.NODE_ENV === 'production' ?
                     <Uploader {...this.props}/>
-                    <DevTools />
-                </div>
+                    :
+                    <div>
+                        <Uploader {...this.props}/>
+                        <DevTools />
+                    </div>
+                }
             </Provider>
         );
     }
