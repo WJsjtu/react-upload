@@ -5872,7 +5872,17 @@ var _reduxDevtoolsDockMonitor2 = _interopRequireDefault(_reduxDevtoolsDockMonito
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-exports['default'] = (0, _reduxDevtools.createDevTools)(_react2['default'].createElement(
+/**
+ *
+ * My hack for Webpack Tree Shaking problem.
+ * In this situation, `redux-devtools*` are totally not needed in production mode,
+ * so I can defined these libraries as undefined by setting externals options to Webpack.
+ * This will end up with error: `createDevTools of undefined`.
+ * So I put the assert here to let UglifyJS remove the dead code,
+ * thus avoiding the negative condition from executing. Of course there will be no error any longer.
+ *
+ */
+exports['default'] =  false ? undefined : (0, _reduxDevtools.createDevTools)(_react2['default'].createElement(
     _reduxDevtoolsDockMonitor2['default'],
     { toggleVisibilityKey: 'ctrl-h',
         changePositionKey: 'ctrl-q' },
@@ -12867,10 +12877,31 @@ var _DevTools2 = _interopRequireDefault(_DevTools);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var enhancer = (0, _redux.compose)(_DevTools2['default'].instrument(), (0, _reduxDevtools.persistState)(window.location.href.match(/[?&]debug_session=([^&#]+)\b/)));
-
 function configureStore(initialState) {
-    return (0, _redux.createStore)(_reducers2['default'], initialState, enhancer);
+    if (false) {
+        return (0, _redux.createStore)(_reducers2['default'], initialState);
+    } else {
+
+        /**
+         *
+         * Webpack's Tree-Shaking problems may need long time to solve.
+         * It is still unknown whether the dead code is removed first or Tree-Shaking will be proceeded first .
+         * It is also unknown that whether the unused declaration will still treated as side-affect by UglifyJS.
+         * Keeping declaration here is currently used to remove dead code here only!
+         * `DevTools` will still be imported if Tree-Shaking problems are not solved or
+         * Tree-Shaking is proceeded before removing dead code.
+         * This only works when webpack removed dead code first and then proceed Tree-Shaking later, or
+         * Webpack's Tree-Shaking can tell the module `DevTools` is no longer needed
+         * even the dead code is not removed (Well, I think this is not practical).
+         *
+         * **Note**  Define plugin only replace process.env.NODE_ENV by value set in options, it will not remove dead code.
+         *
+         *
+         */
+        var enhancer = (0, _redux.compose)(_DevTools2['default'].instrument(), (0, _reduxDevtools.persistState)(window.location.href.match(/[?&]debug_session=([^&#]+)\b/)));
+
+        return (0, _redux.createStore)(_reducers2['default'], initialState, enhancer);
+    }
 }
 
 /***/ }),

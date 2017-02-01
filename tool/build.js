@@ -43,6 +43,14 @@ ChainedPromise(
         logger.start();
         return webpackTask(
             {
+                /**
+                 * externals hack for Tree Shaking problem.
+                 */
+                externals: {
+                    'redux-devtools': 'undefined',
+                    'redux-devtools-log-monitor': 'undefined',
+                    'redux-devtools-dock-monitor': 'undefined'
+                },
                 entry: path.join(sourcePath, 'index.js'),
                 output: {
                     path: distPath,
