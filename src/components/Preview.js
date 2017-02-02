@@ -176,9 +176,29 @@ export default class Preview extends Component {
         } else if (tagName == 'video') {
 
             const RVideo = getResponsiveLayout(Video, (width, height) => {
-                return {
-                    width: source.videoWidth ? Math.min(rangeZoom * width, source.videoWidth) : rangeZoom * width,
-                    height: (source.videoHeight ? Math.min(rangeZoom * height, source.videoHeight) : rangeZoom * height),
+                const maxWidth = source.videoWidth ? Math.min(rangeZoom * width, source.videoWidth) : rangeZoom * width;
+                const maxHeight = source.videoHeight ? Math.min(rangeZoom * height, source.videoHeight) : rangeZoom * height;
+
+                /**
+                 * Keep ratio here
+                 */
+                if (source.videoHeight && source.videoWidth) {
+                    if (maxWidth / source.videoWidth > maxHeight / source.videoHeight) {
+                        return {
+                            width: maxHeight * source.videoWidth / source.videoHeight,
+                            height: maxHeight
+                        }
+                    } else {
+                        return {
+                            width: maxWidth,
+                            height: maxWidth * source.videoHeight / source.videoWidth
+                        }
+                    }
+                } else {
+                    return {
+                        width: maxWidth,
+                        height: maxHeight,
+                    }
                 }
             });
 

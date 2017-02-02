@@ -6472,6 +6472,42 @@ module.exports = __webpack_require__(1).getIteratorMethod = function(it){
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.listen = exports.filter = exports.off = exports.on = undefined;
+
+var _on = __webpack_require__(124);
+
+var _on2 = _interopRequireDefault(_on);
+
+var _off = __webpack_require__(123);
+
+var _off2 = _interopRequireDefault(_off);
+
+var _filter = __webpack_require__(330);
+
+var _filter2 = _interopRequireDefault(_filter);
+
+var _listen = __webpack_require__(331);
+
+var _listen2 = _interopRequireDefault(_listen);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.on = _on2.default;
+exports.off = _off2.default;
+exports.filter = _filter2.default;
+exports.listen = _listen2.default;
+exports.default = { on: _on2.default, off: _off2.default, filter: _filter2.default, listen: _listen2.default };
+
+/***/ }),
+/* 123 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _inDOM = __webpack_require__(17);
 
@@ -6494,7 +6530,7 @@ exports.default = off;
 module.exports = exports['default'];
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6529,65 +6565,6 @@ if (_inDOM2.default) {
 
 exports.default = on;
 module.exports = exports['default'];
-
-/***/ }),
-/* 124 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.requestAnimationFrame = exports.ownerWindow = exports.ownerDocument = exports.activeElement = exports.query = exports.events = exports.style = undefined;
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _style = __webpack_require__(47);
-
-var _style2 = _interopRequireDefault(_style);
-
-var _events = __webpack_require__(331);
-
-var _events2 = _interopRequireDefault(_events);
-
-var _query = __webpack_require__(335);
-
-var _query2 = _interopRequireDefault(_query);
-
-var _activeElement = __webpack_require__(329);
-
-var _activeElement2 = _interopRequireDefault(_activeElement);
-
-var _ownerDocument = __webpack_require__(33);
-
-var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
-
-var _ownerWindow = __webpack_require__(333);
-
-var _ownerWindow2 = _interopRequireDefault(_ownerWindow);
-
-var _requestAnimationFrame = __webpack_require__(347);
-
-var _requestAnimationFrame2 = _interopRequireDefault(_requestAnimationFrame);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.style = _style2.default;
-exports.events = _events2.default;
-exports.query = _query2.default;
-exports.activeElement = _activeElement2.default;
-exports.ownerDocument = _ownerDocument2.default;
-exports.ownerWindow = _ownerWindow2.default;
-exports.requestAnimationFrame = _requestAnimationFrame2.default;
-exports.default = _extends({}, _events2.default, _query2.default, {
-  style: _style2.default,
-  activeElement: _activeElement2.default,
-  ownerDocument: _ownerDocument2.default,
-  ownerWindow: _ownerWindow2.default,
-  requestAnimationFrame: _requestAnimationFrame2.default
-});
 
 /***/ }),
 /* 125 */
@@ -11268,10 +11245,30 @@ var Preview = (_class = function (_Component) {
             } else if (tagName == 'video') {
 
                 var RVideo = (0, _getResponsiveLayout2['default'])(_Video2['default'], function (width, height) {
-                    return {
-                        width: source.videoWidth ? Math.min(rangeZoom * width, source.videoWidth) : rangeZoom * width,
-                        height: source.videoHeight ? Math.min(rangeZoom * height, source.videoHeight) : rangeZoom * height
-                    };
+                    var maxWidth = source.videoWidth ? Math.min(rangeZoom * width, source.videoWidth) : rangeZoom * width;
+                    var maxHeight = source.videoHeight ? Math.min(rangeZoom * height, source.videoHeight) : rangeZoom * height;
+
+                    /**
+                     * Keep ratio here
+                     */
+                    if (source.videoHeight && source.videoWidth) {
+                        if (maxWidth / source.videoWidth > maxHeight / source.videoHeight) {
+                            return {
+                                width: maxHeight * source.videoWidth / source.videoHeight,
+                                height: maxHeight
+                            };
+                        } else {
+                            return {
+                                width: maxWidth,
+                                height: maxWidth * source.videoHeight / source.videoWidth
+                            };
+                        }
+                    } else {
+                        return {
+                            width: maxWidth,
+                            height: maxHeight
+                        };
+                    }
                 });
 
                 return React.createElement(RVideo, { source: source, controls: true, currentTime: 0 });
@@ -12221,6 +12218,18 @@ exports['default'] = undefined;
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _desc, _value, _class;
+/**
+ * Well, Tree-Shaking doesn't work even if written in this way, the whole dom-helpers is bundled.
+ */
+
+
+/**
+ * However this doesn't work either. I give up.
+ */
+/*
+ import DOM_ON from 'dom-helpers/events/on';
+ import DOM_OFF from 'dom-helpers/events/off';
+ */
 
 exports.getWindowSize = getWindowSize;
 
@@ -12232,9 +12241,7 @@ var _reactAddonsPureRenderMixin = __webpack_require__(9);
 
 var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-var _domHelpers = __webpack_require__(124);
-
-var _domHelpers2 = _interopRequireDefault(_domHelpers);
+var _events = __webpack_require__(122);
 
 var _coreDecorators = __webpack_require__(41);
 
@@ -12296,14 +12303,14 @@ var Resize = (_class = function (_Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this.mounted = true;
-            _domHelpers2['default'].on(window, 'resize', this.updateSize);
+            (0, _events.on)(window, 'resize', this.updateSize);
             this.props.triggerOnMount && this.updateSize();
         }
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
             this.mounted = false;
-            _domHelpers2['default'].off(window, 'resize', this.updateSize);
+            (0, _events.off)(window, 'resize', this.updateSize);
         }
     }, {
         key: 'render',
@@ -12338,8 +12345,8 @@ Resize.defaultProps = {
 
 function getWindowSize() {
     return {
-        height: window.screen.availHeight,
-        width: window.screen.availWidth
+        height: window.innerHeight,
+        width: window.innerWidth
     };
 }
 
@@ -12397,27 +12404,31 @@ var Video = function (_Component) {
 
     _createClass(Video, [{
         key: 'setVideoInfo',
-        value: function setVideoInfo() {
-            if (typeof this.props.source == 'string') {
+        value: function setVideoInfo(props) {
+            if (typeof props.source == 'string') {
                 if (this.refs.video) {
-                    this.refs.video.currentTime = this.props.currentTime || 0;
+                    this.refs.video.currentTime = props.currentTime || 0;
                 }
             } else if ((0, _isElement2['default'])(this.props.source)) {
-                this.props.source.currentTime = this.props.currentTime || 0;
-                this.props.source.style.width = this.state.width + 'px';
-                this.props.source.style.height = this.state.height + 'px';
-                this.props.source.controls = this.props.controls;
+                props.source.currentTime = props.currentTime || 0;
+                props.source.style.width = this.state.width + 'px';
+                props.source.style.height = this.state.height + 'px';
+                props.source.controls = props.controls;
             }
+            this.setState({
+                width: props.width,
+                height: props.height
+            });
         }
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this.setVideoInfo();
+            this.setVideoInfo(this.props);
         }
     }, {
-        key: 'componentDidUpdate',
-        value: function componentDidUpdate() {
-            this.setVideoInfo();
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            this.setVideoInfo(nextProps);
         }
     }, {
         key: 'render',
@@ -12980,7 +12991,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _domHelpers = __webpack_require__(124);
+var _domHelpers = __webpack_require__(332);
 
 var _domHelpers2 = _interopRequireDefault(_domHelpers);
 
@@ -17761,52 +17772,16 @@ module.exports = exports['default'];
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.listen = exports.filter = exports.off = exports.on = undefined;
-
-var _on = __webpack_require__(123);
-
-var _on2 = _interopRequireDefault(_on);
-
-var _off = __webpack_require__(122);
-
-var _off2 = _interopRequireDefault(_off);
-
-var _filter = __webpack_require__(330);
-
-var _filter2 = _interopRequireDefault(_filter);
-
-var _listen = __webpack_require__(332);
-
-var _listen2 = _interopRequireDefault(_listen);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.on = _on2.default;
-exports.off = _off2.default;
-exports.filter = _filter2.default;
-exports.listen = _listen2.default;
-exports.default = { on: _on2.default, off: _off2.default, filter: _filter2.default, listen: _listen2.default };
-
-/***/ }),
-/* 332 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
 var _inDOM = __webpack_require__(17);
 
 var _inDOM2 = _interopRequireDefault(_inDOM);
 
-var _on = __webpack_require__(123);
+var _on = __webpack_require__(124);
 
 var _on2 = _interopRequireDefault(_on);
 
-var _off = __webpack_require__(122);
+var _off = __webpack_require__(123);
 
 var _off2 = _interopRequireDefault(_off);
 
@@ -17825,6 +17800,65 @@ if (_inDOM2.default) {
 
 exports.default = listen;
 module.exports = exports['default'];
+
+/***/ }),
+/* 332 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.requestAnimationFrame = exports.ownerWindow = exports.ownerDocument = exports.activeElement = exports.query = exports.events = exports.style = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _style = __webpack_require__(47);
+
+var _style2 = _interopRequireDefault(_style);
+
+var _events = __webpack_require__(122);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _query = __webpack_require__(335);
+
+var _query2 = _interopRequireDefault(_query);
+
+var _activeElement = __webpack_require__(329);
+
+var _activeElement2 = _interopRequireDefault(_activeElement);
+
+var _ownerDocument = __webpack_require__(33);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+var _ownerWindow = __webpack_require__(333);
+
+var _ownerWindow2 = _interopRequireDefault(_ownerWindow);
+
+var _requestAnimationFrame = __webpack_require__(347);
+
+var _requestAnimationFrame2 = _interopRequireDefault(_requestAnimationFrame);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.style = _style2.default;
+exports.events = _events2.default;
+exports.query = _query2.default;
+exports.activeElement = _activeElement2.default;
+exports.ownerDocument = _ownerDocument2.default;
+exports.ownerWindow = _ownerWindow2.default;
+exports.requestAnimationFrame = _requestAnimationFrame2.default;
+exports.default = _extends({}, _events2.default, _query2.default, {
+  style: _style2.default,
+  activeElement: _activeElement2.default,
+  ownerDocument: _ownerDocument2.default,
+  ownerWindow: _ownerWindow2.default,
+  requestAnimationFrame: _requestAnimationFrame2.default
+});
 
 /***/ }),
 /* 333 */

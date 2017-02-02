@@ -1,6 +1,18 @@
 import React, {PropTypes, Component, createElement} from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import dom from 'dom-helpers';
+/**
+ * Well, Tree-Shaking doesn't work even if written in this way, the whole dom-helpers is bundled.
+ */
+import {on as DOM_ON, off as DOM_OFF} from 'dom-helpers/events';
+
+/**
+ * However this doesn't work either. I give up.
+ */
+/*
+ import DOM_ON from 'dom-helpers/events/on';
+ import DOM_OFF from 'dom-helpers/events/off';
+ */
+
 import {autobind} from 'core-decorators';
 
 export default class Resize extends Component {
@@ -25,13 +37,13 @@ export default class Resize extends Component {
 
     componentDidMount() {
         this.mounted = true;
-        dom.on(window, 'resize', this.updateSize);
+        DOM_ON(window, 'resize', this.updateSize);
         this.props.triggerOnMount && this.updateSize();
     }
 
     componentWillUnmount() {
         this.mounted = false;
-        dom.off(window, 'resize', this.updateSize);
+        DOM_OFF(window, 'resize', this.updateSize);
     }
 
     render() {
@@ -53,7 +65,7 @@ Resize.defaultProps = {
 
 export function getWindowSize() {
     return {
-        height: window.screen.availHeight,
-        width: window.screen.availWidth
+        height: window.innerHeight,
+        width: window.innerWidth
     };
 }

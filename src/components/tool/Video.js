@@ -14,25 +14,29 @@ export default class Video extends Component {
         };
     }
 
-    setVideoInfo() {
-        if (typeof this.props.source == 'string') {
+    setVideoInfo(props) {
+        if (typeof props.source == 'string') {
             if (this.refs.video) {
-                this.refs.video.currentTime = this.props.currentTime || 0;
+                this.refs.video.currentTime = props.currentTime || 0;
             }
         } else if (isElement(this.props.source)) {
-            this.props.source.currentTime = this.props.currentTime || 0;
-            this.props.source.style.width = this.state.width + 'px';
-            this.props.source.style.height = this.state.height + 'px';
-            this.props.source.controls = this.props.controls;
+            props.source.currentTime = props.currentTime || 0;
+            props.source.style.width = this.state.width + 'px';
+            props.source.style.height = this.state.height + 'px';
+            props.source.controls = props.controls;
         }
+        this.setState({
+            width: props.width,
+            height: props.height
+        });
     }
 
     componentDidMount() {
-        this.setVideoInfo();
+        this.setVideoInfo(this.props);
     }
 
-    componentDidUpdate() {
-        this.setVideoInfo();
+    componentWillReceiveProps(nextProps) {
+        this.setVideoInfo(nextProps);
     }
 
     render() {
