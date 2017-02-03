@@ -1,7 +1,6 @@
 import Resize, {getWindowSize} from './../components/tool/Resize';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React, {Component} from 'react';
-import {autobind} from 'core-decorators';
 
 export default function getResponsiveLayout(component, mapSizeToProps) {
 
@@ -18,10 +17,9 @@ export default function getResponsiveLayout(component, mapSizeToProps) {
             this.state = {
                 transferProps: Object.assign({}, this.props, mapSizeToProps(width, height))
             };
+            this.onResize = this.onResize.bind(this);
         }
 
-
-        @autobind
         onResize(size) {
             const {width, height} = size;
             this.setState({

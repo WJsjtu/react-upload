@@ -1,6 +1,5 @@
 import {Component, PropTypes} from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import {autobind} from 'core-decorators';
 
 import Html from './tool/Html';
 import Modal from './tool/Modal';
@@ -76,6 +75,7 @@ export default class Preview extends Component {
     constructor(props) {
         super(props);
         this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+        this.onClick = ::this.onClick;
         this.preview = null;
         this.source = null;
         this.state = {
@@ -401,7 +401,6 @@ export default class Preview extends Component {
         );
     }
 
-    @autobind
     onClick(event) {
         event.stopPropagation();
         if (this.refs.modal && !this.refs.modal.isOpen() && this.state.source) {

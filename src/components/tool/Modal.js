@@ -1,13 +1,16 @@
 import {Component, PropTypes} from 'react';
 import {unstable_renderSubtreeIntoContainer} from 'react-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import {autobind} from 'core-decorators';
 
 export default class Modal extends Component {
 
     constructor(props) {
         super(props);
         this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+        this.onMaskClick = ::this.onMaskClick;
+        this.close = ::this.close;
+        this.open = ::this.open;
+        this.isOpen = ::this.isOpen;
         this.state = {
             isOpen: false
         };
@@ -80,7 +83,6 @@ export default class Modal extends Component {
         return this._container;
     }
 
-    @autobind
     onMaskClick(event) {
         event.stopPropagation();
         if (this.props.closeOnMaskClick) {
@@ -88,7 +90,6 @@ export default class Modal extends Component {
         }
     }
 
-    @autobind
     close() {
         this.setState({
             isOpen: false
@@ -99,14 +100,12 @@ export default class Modal extends Component {
         bodyStyle.overflowY = this.bodyOverFlowStyle.overflowY;
     }
 
-    @autobind
     open() {
         this.setState({
             isOpen: true
         });
     }
 
-    @autobind
     isOpen() {
         return this.state.isOpen;
     }

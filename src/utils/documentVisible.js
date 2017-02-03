@@ -1,4 +1,4 @@
-import dom from 'dom-helpers';
+import {on as DOM_ON} from 'dom-helpers/events';
 
 const hiddenProperty = 'hidden' in document ? 'hidden' :
     'webkitHidden' in document ? 'webkitHidden' :
@@ -12,6 +12,6 @@ const onVisibilityChange = function () {
     visible = !!document[hiddenProperty];
 };
 
-dom.on(document, visibilityChangeEvent, onVisibilityChange);
+DOM_ON(document, visibilityChangeEvent, onVisibilityChange);
 
 export default visible;
