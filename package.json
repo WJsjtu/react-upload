@@ -26,6 +26,7 @@
     "blueimp-file-upload": "^9.14.2",
     "bootstrap": "^3.3.7",
     "cli-color": "^1.1.0",
+    "comment-loader": "0.0.3",
     "core-decorators": "^0.15.0",
     "css-loader": "^0.26.0",
     "dom-helpers": "^3.2.0",

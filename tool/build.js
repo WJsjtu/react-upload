@@ -34,6 +34,21 @@ ChainedPromise(
                         }
                     })
                 ]
+            }, function (options) {
+                options.module.rules.forEach(function (rule, index) {
+                    if (rule.test instanceof RegExp) {
+                        if ('test.js'.match(rule.test)) {
+                            options.module.rules[index].use.push(
+                                {
+                                    loader: 'comment-loader',
+                                    options: {
+                                        definition: ['DEBUG']
+                                    }
+                                }
+                            );
+                        }
+                    }
+                });
             }
         ).then(logger.finish.bind(logger), logger.error.bind(logger));
     }
@@ -43,14 +58,6 @@ ChainedPromise(
         logger.start();
         return webpackTask(
             {
-                /**
-                 * externals hack for Tree Shaking problem.
-                 */
-                externals: {
-                    'redux-devtools': 'undefined',
-                    'redux-devtools-log-monitor': 'undefined',
-                    'redux-devtools-dock-monitor': 'undefined'
-                },
                 entry: path.join(sourcePath, 'index.js'),
                 output: {
                     path: distPath,
@@ -79,6 +86,22 @@ ChainedPromise(
                         }
                     })
                 ]
+            }, function (options) {
+                options.module.rules.forEach(function (rule, index) {
+                    if (rule.test instanceof RegExp) {
+                        if ('test.js'.match(rule.test)) {
+                            options.module.rules[index].use.push(
+                                {
+                                    loader: 'comment-loader',
+                                    options: {
+                                        definition: ['RELEASE']
+                                    }
+                                }
+                            );
+                        }
+                    }
+                });
+
             }
         ).then(logger.finish.bind(logger), logger.error.bind(logger));
     }

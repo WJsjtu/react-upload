@@ -1,7 +1,10 @@
 import React, {Component, createElement} from 'react';
 import {Provider} from 'react-redux';
 import Uploader from './Uploader';
+//<#IF_DEF DEBUG>
 import DevTools from './DevTools';
+//<#END_IF>
+
 import configureStore from './../store/configureStore';
 
 export default class Root extends Component {
@@ -12,17 +15,26 @@ export default class Root extends Component {
     }
 
     render() {
-        return (
+
+        let root;
+
+        //<#IF_DEF DEBUG>
+        root = (
             <Provider store={this.store}>
-                {process.env.NODE_ENV === 'production' ?
+                <div>
                     <Uploader {...this.props}/>
-                    :
-                    <div>
-                        <Uploader {...this.props}/>
-                        <DevTools />
-                    </div>
-                }
+                    <DevTools />
+                </div>
             </Provider>
         );
+        //<#ELSE>
+        root = (
+            <Provider store={this.store}>
+                <Uploader {...this.props}/>
+            </Provider>
+        );
+        //<#END_IF>
+
+        return root;
     }
 }

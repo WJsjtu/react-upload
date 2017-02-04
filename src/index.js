@@ -11,7 +11,6 @@ require('blueimp-file-upload/js/jquery.fileupload-validate.js');
 require('blueimp-file-upload/js/cors/jquery.postmessage-transport.js');
 require('blueimp-file-upload/js/cors/jquery.xdr-transport.js');
 
-
 import React, {createElement} from 'react';
 import {render} from 'react-dom';
 import Root from './containers/Root';

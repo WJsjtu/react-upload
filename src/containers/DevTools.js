@@ -1,4 +1,4 @@
-import React, {createElement} from 'react';
+import React from 'react';
 import {createDevTools} from 'redux-devtools';
 import LogMonitor from 'redux-devtools-log-monitor';
 import DockMonitor from 'redux-devtools-dock-monitor';
@@ -13,7 +13,7 @@ import DockMonitor from 'redux-devtools-dock-monitor';
  * thus avoiding the negative condition from executing. Of course there will be no error any longer.
  *
  */
-export default process.env.NODE_ENV === 'production' ? undefined : createDevTools(
+export default createDevTools(
     <DockMonitor toggleVisibilityKey='ctrl-h'
                  changePositionKey='ctrl-q'>
         <LogMonitor />
