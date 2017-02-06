@@ -7725,9 +7725,9 @@ var POSITIONS = exports.POSITIONS = ['left', 'top', 'right', 'bottom'];
 exports.__esModule = true;
 exports.INIT_ACTION = exports.ActionCreators = exports.ActionTypes = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 exports.liftAction = liftAction;
 exports.liftReducerWith = liftReducerWith;
@@ -7784,7 +7784,7 @@ var ActionCreators = exports.ActionCreators = {
 
     return {
       type: ActionTypes.PERFORM_ACTION,
-      action: shouldStringifyType ? _extends({}, action, { type: action.type.toString() }) : action,
+      action: shouldStringifyType && _typeof(action.type) === 'symbol' ? _extends({}, action, { type: action.type.toString() }) : action,
       timestamp: Date.now()
     };
   },
@@ -7880,7 +7880,7 @@ function recomputeStates(computedStates, minInvalidatedStateIndex, reducer, comm
   for (var i = minInvalidatedStateIndex; i < stagedActionIds.length; i++) {
     var actionId = stagedActionIds[i];
     var action = actionsById[actionId].action;
-    if (options.stringifyActionTypes) {
+    if (options.stringifyActionTypes && typeof action.type === 'string') {
       var sType = action.type.match(/^Symbol\((.+)\)$/);
       if (sType) action = _extends({}, action, { type: Symbol.for(sType[1]) });
     }
